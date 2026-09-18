@@ -1,9 +1,14 @@
 import axios from "axios";
 
+const API_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:8000";
+
 export const apiClient = axios.create({
-  baseURL: "/api",
+  baseURL: `${API_URL}/api`,
   withCredentials: true,
-  headers: { "Content-Type": "application/json" },
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 apiClient.interceptors.response.use(
@@ -13,6 +18,7 @@ apiClient.interceptors.response.use(
       err.response?.data?.error?.message ||
       err.message ||
       "Request failed";
+
     return Promise.reject({
       status: err.response?.status,
       message,
@@ -21,5 +27,3 @@ apiClient.interceptors.response.use(
     });
   }
 );
-
-
